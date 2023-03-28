@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Code - Share Code</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.min.css">
+</head>
+
+<body>
+    <div class="loader">
+        <img src="/icon.png" alt="">
+        <b>Share Code</b>
+        <span>Loading Editor</span>
+    </div>
+
+    <div id="editor"></div>
+    <div class="btns">
+        <div class="btn preview-btn">Preview</div>
+        <div class="btn share-btn">Publish</div>
+    </div>
+
+    <div class="preview-frame">
+        <div class="top">Share Code Preview
+            <img src="https://img.icons8.com/ios-glyphs/30/null/delete-sign.png" class="close-preview" alt="close" />
+        </div>
+        <iframe frameborder="0" class="preview"></iframe>
+    </div>
+
+    <div class="share-dialog-overlay">
+        <div class="share-dialog">
+            <div class="titlebar">
+                <div class="text">Share This Code</div>
+                <img src="https://img.icons8.com/ios-glyphs/30/null/delete-sign.png" class="close-share-popup"
+                    alt="close" />
+            </div>
+            <div class="body">
+                <div class="section" style="margin-bottom:20px;">
+                    <label for="code-password">Enter Code Access Password (Required)</label>
+                    <br>
+                    <input type="password" id="code-password" value="test">
+                </div>
+
+                <div class="section">
+                    <label for="code-name">Name Of Your Code (Optional)</label>
+                    <br>
+                    <input type="text" id="code-name">
+                </div>
+
+                <div class="section" style="margin-top:10px;">
+                    <label for="code-name">Email (Required)</label>
+                    <br>
+                    <input type="email" id="email-id">
+                </div>
+
+                <div
+                    style="width:calc(100% - 10px);margin-left:10px;margin-right:10px;margin-top:5px;display:flex;align-items:center;font-family:'Barlow',sans-serif;">
+                    Ads Will Not Be Displayed On Your Site
+                    <img src="https://img.icons8.com/ios-glyphs/30/null/info--v1.png" alt="info" loading="lazy"
+                        width="17" style="cursor:pointer;" onclick="new jBox('Modal', {
+                        title: '<b style=\'font-family:Barlow,sans-serif;\'>Info</b>',
+                    content: '<div style=\'font-family:Barlow,sans-serif;\'>We won\'t put any kind of ad on your site. Instead, ads will only be displayed in the editor while editing your code so that we can pay for the requests received from your codes!<div>',
+                    overlay: false,
+                    draggable: true
+                    }).open();" />
+                </div>
+                <p
+                    style="width:calc(100% - 10px);font-family:'Barlow',sans-serif;margin:0;margin-top:5px;margin-left:10px;margin-right:10px;">
+                    Your
+                    Password
+                    Is Securely <a href="https://www.cloudflare.com/learning/ssl/what-is-encryption/"
+                        target="_blank">Encrypted</a> With
+                    HMacSHA512 + MD5 Algorithms!</p>
+
+                <b
+                    style="width:calc(100% - 10px);margin:0;margin-top:10px;margin-left:5px;margin-right:5px;font-family:'Barlow',sans-serif;white-space:nowrap;overflow:auto;">
+                    Note: Your Code Will Automatically Get Deleted After 1 Year Of Inactiveness That Means, If No One
+                    Visits Your Code For 1 Year Than Your Last Visit Of Your Code, It Would Automatiaclly Get
+                    Deleted Since It Shows That The Code Is Not Required Anymore! Also, We Can Contact You Anytime If
+                    Needed Due To Which We Collect Email Address!
+                </b>
+                <div class="share-complete">Publish Code!</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap');
+
+    .share-dialog-overlay {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgb(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .share-dialog {
+        width: calc(100% - 20px);
+        height: 390px;
+        background-color: white;
+        border-radius: 5px;
+        overflow: hidden;
+        max-width: 500px;
+    }
+
+    .share-dialog .titlebar {
+        width: 100%;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Barlow', sans-serif;
+        background-color: rgb(231, 231, 231);
+        user-select: none;
+        margin-bottom: 10px;
+    }
+
+    .share-dialog .text {
+        width: 100%;
+        text-align: center;
+        margin-left: 20px;
+    }
+
+    .share-dialog .close-share-popup {
+        width: 20px;
+        padding-right: 5px;
+        position: static;
+    }
+
+    .share-dialog .body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .share-dialog .body>* {
+        flex-shrink: 0;
+    }
+
+    .share-dialog .body .section {
+        width: calc(100% - 10px);
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .share-dialog .body .section label {
+        font-family: 'Barlow', sans-serif;
+        font-size: 15px;
+    }
+
+    .share-dialog .body .section input {
+        width: calc(100% - 15px);
+        padding: 5px;
+        border: 1px solid darkgrey;
+        border-radius: 5px;
+        font-size: 17px;
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .share-complete {
+        width: calc(100% - 10px);
+        height: 40px;
+        color: white;
+        font-family: 'Barlow', sans-serif;
+        background-color: blueviolet;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        user-select: none;
+        cursor: pointer;
+        transition: all .10s linear;
+    }
+
+    .share-complete:active {
+        background-color: rgb(125, 40, 206);
+    }
+
+    body {
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        background-color: rgb(53, 53, 53);
+    }
+
+    .loader {
+        width: 100%;
+        height: 100%;
+        font-family: 'Barlow';
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 100000;
+        background-color: white;
+    }
+
+    .loader b {
+        font-size: 25px;
+    }
+
+    #editor {
+        width: 100%;
+        height: calc(100% - 100px);
+        font-size: 17px;
+    }
+
+    .btns {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .btns>* {
+        flex-shrink: 0;
+    }
+
+    .btn {
+        width: calc(50% - 20px);
+        height: 20px;
+        padding: 10px;
+        color: white;
+        background-color: blueviolet;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        font-family: 'Barlow', sans-serif;
+        transition: all .10s linear;
+    }
+
+    .share-btn {
+        width: calc(50% - 21px);
+        margin-left: 1px;
+    }
+
+    .btn:active {
+        background-color: rgb(125, 40, 206);
+    }
+
+    .preview-frame {
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: white;
+        display: none;
+    }
+
+    .preview-frame .top {
+        width: 100%;
+        height: 30px;
+        border-bottom: 1px solid darkgrey;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Barlow', sans-serif;
+        user-select: none;
+    }
+
+    .preview-frame .top img {
+        width: 20px;
+        position: fixed;
+        right: 0px;
+        padding-right: 10px;
+    }
+
+    .preview {
+        width: 100%;
+        height: calc(100% - 30px);
+    }
+
+    * {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+</style>
+
+<script>
+    (() => {
+        (async () => {
+            var a = document.createElement('div');
+            a.innerHTML = '&nbsp;';
+            a.className = 'ads ad adsbox doubleclick ad-placement carbon-ads adglare';
+            a.style = 'width: 1px !important; height: 1px !important; position: absolute !important; left: -5000px !important; top: -5000px !important;';
+            var ads = false;
+            try {
+                document.body.appendChild(a);
+                var e = document.getElementsByClassName('adsbox')[0];
+                if (e.offsetHeight === 0 || e.clientHeight === 0) ads = true;
+                if (window.getComputedStyle !== undefined) {
+                    var tmp = window.getComputedStyle(e, null);
+                    if (tmp && (tmp.getPropertyValue('display') == 'none' || tmp.getPropertyValue('visibility') == 'hidden')) r = true;
+                }
+                document.body.removeChild(a);
+            } catch (e) { }
+            if (ads == true) {
+                alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
+            } else {
+                let AdScript = document.createElement('script');
+                AdScript.setAttribute('type', 'text/javascript');
+                AdScript.innerText = `atOptions = {'key': '99af1f3ae10e696f18b28c1dd9f8bbad','format': 'iframe','height': 60,'width': 468,'params': {}};document.write('<scr' + 'ipt type="text/javascript" defer src="http' + (location.protocol === 'https:' ? 's' : '') + '://pistolterrificsuspend.com/99af1f3ae10e696f18b28c1dd9f8bbad/invoke.js"></scr' + 'ipt>');`
+                document.body.appendChild(AdScript);
+            }
+        })();
+
+        let editor;
+        let fetching = false;
+        $(document).ready(() => {
+            document.body.style.height = window.innerHeight + 'px';
+            $('.share-dialog-overlay').hide();
+
+            editor = ace.edit("editor");
+            editor.setTheme("ace/theme/monokai");
+            editor.session.setMode("ace/mode/html");
+            editor.setShowPrintMargin(false);
+
+            $(window).on('resize', () => {
+                $(document.body).css('height', window.innerHeight + 'px');
+            });
+        });
+
+        $(window).on('load', () => {
+            $('.loader').fadeOut(500, () => {
+                editor.focus();
+            });
+        });
+
+        $('.preview-btn').click(() => {
+            console.log($('#editor').val())
+            $('.preview').attr('srcdoc', editor.getValue());
+            $('.preview-frame').fadeIn(500);
+
+        });
+
+        $('.close-preview').click(() => {
+            $('.preview-frame').fadeOut(500, () => {
+                editor.focus();
+                $('.preview').attr('srcdoc', '');
+            });
+        });
+
+        $('.share-btn').click(() => {
+            $('.share-dialog-overlay').fadeIn(500);
+        });
+
+        $('.share-dialog-overlay').click((event) => {
+            if ($(event.target).hasClass('share-dialog-overlay')) {
+                $('.share-dialog-overlay').fadeOut(500);
+            }
+        });
+
+        $('.share-dialog-overlay .close-share-popup').click(() => {
+            $('.share-dialog-overlay').fadeOut(500);
+        });
+
+        $(document).on('keydown', (key) => {
+            if (key.ctrlKey == true && key.key == 's') {
+                key.preventDefault();
+                $('.share-btn').click();
+            }
+        });
+
+        $('.share-complete').click(() => {
+            let password = $('#code-password').val();
+            let codeName = $('#code-name').val();
+            let email = $('#email-id').val();
+            if (editor.getValue().length < 405522) {
+                if (password != null && password.trim() != '') {
+                    if (email != null && email.trim() != '' && email.includes('@')) {
+                        $.ajax({
+                            url: '/share',
+                            method: 'POST',
+                            data: {
+                                password: password,
+                                code: editor.getValue(),
+                                id: codeName,
+                                email: email
+                            }
+                        }).done((data) => {
+                            if (data.success != null && data.success == true) {
+                                window.location.href = 'https://edit.share-code.top/' + data.id + '?password=' + $('#code-password').val();
+                            }
+                            else {
+                                new jBox('Modal', {
+                                    title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                    content: '<div style="font-family:\'Barlow\',sans-serif;">' + data.error + '</div>',
+                                    overlay: false,
+                                    draggable: true
+                                }).open();
+                            }
+                        }).fail(() => {
+                            new jBox('Modal', {
+                                title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                content: '<div style="font-family:\'Barlow\',sans-serif;">Failed To Send The Request To The Server!</div>',
+                                overlay: false,
+                                draggable: true
+                            }).open();
+                        });
+                    }
+                    else {
+                        $('#email-id').css('border', '1px solid red');
+                    }
+                }
+                else {
+                    $('#code-password').css('border', '1px solid red');
+                }
+            }
+            else {
+                new jBox('Modal', {
+                    title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                    content: '<div style="font-family:\'Barlow\',sans-serif;">Request Size Too Big<br>Maximum Characters: 405522</div>',
+                    overlay: false,
+                    draggable: true,
+                    onClose: () => {
+                        requestOn = false
+                    }
+                }).open();
+            }
+        });
+    })();
+</script>
+
+</html>

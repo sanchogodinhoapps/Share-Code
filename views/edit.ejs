@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Code - Share Code</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.all.min.css">
+</head>
+
+<body>
+    <div class="loader">
+        <img src="/icon.png" alt="">
+        <b>Share Code</b>
+        <span>Loading Editor</span>
+    </div>
+
+    <div id="editor">
+        <%= code.replace(/^\s+|\s+$/g, '' ) %>
+    </div>
+    <div class="btns">
+        <div class="btn preview-btn">Preview</div>
+        <div class="btn update-btn">Update</div>
+        <div class="btn delete-btn">Delete</div>
+    </div>
+
+    <div class="preview-frame">
+        <div class="top">Share Code Preview
+            <img src="https://img.icons8.com/ios-glyphs/30/null/delete-sign.png" class="close-preview" alt="close" />
+        </div>
+        <iframe frameborder="0" class="preview"></iframe>
+    </div>
+
+    <% if (auth==true){ %>
+        <div class="dialog-overlay">
+            <div class="dialog">
+                <div class="top">Enter Access Password</div>
+                <div class="body">
+                    <input type="text" class="password" placeholder="Access Password">
+                </div>
+            </div>
+        </div>
+        <% } %>
+</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap');
+
+    body {
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .loader {
+        width: 100%;
+        height: 100%;
+        font-family: 'Barlow';
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 100000;
+        background-color: white;
+    }
+
+    .loader b {
+        font-size: 25px;
+    }
+
+    #editor {
+        width: 100%;
+        height: calc(100% - 40px);
+        font-size: 17px;
+    }
+
+    .btns {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn {
+        width: calc(50% - 20px);
+        height: 20px;
+        padding: 10px;
+        color: white;
+        background-color: blueviolet;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        font-family: 'Barlow', sans-serif;
+        transition: all .10s linear;
+    }
+
+    .update-btn {
+        width: calc(50% - 21px);
+        margin-left: 1px;
+    }
+
+    .delete-btn {
+        width: calc(50% - 21px);
+        margin-left: 1px;
+    }
+
+    .btn:active {
+        background-color: rgb(125, 40, 206);
+    }
+
+    .preview-frame {
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: white;
+        display: none;
+    }
+
+    .preview-frame .top {
+        width: 100%;
+        height: 30px;
+        border-bottom: 1px solid darkgrey;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Barlow', sans-serif;
+        user-select: none;
+    }
+
+    .preview-frame .top img {
+        width: 20px;
+        position: fixed;
+        right: 0px;
+        padding-right: 10px;
+    }
+
+    .preview {
+        width: 100%;
+        height: calc(100% - 30px);
+    }
+
+    input.password {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 0;
+        background-color: rgb(233, 233, 233);
+        border-radius: 5px;
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .dialog-overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgb(0, 0, 0, 0.5);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dialog {
+        width: calc(100% - 20px);
+        margin-left: 10px;
+        margin-right: 10px;
+        background-color: white;
+        border-radius: 5px;
+        overflow: hidden;
+        max-width: 500px;
+    }
+
+    .dialog .top {
+        background-color: rgb(216, 216, 216);
+        width: calc(100% - 20px);
+        padding: 10px;
+        text-align: center;
+        font-family: 'Barlow', sans-serif;
+        font-weight: 500;
+        user-select: none;
+    }
+
+    .jBox-Default {
+        font-family: 'Barlow', sans-serif;
+    }
+
+    * {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+</style>
+
+<script>
+    (() => {
+        let editor;
+        let requestOn = false;
+        let IsFileSaving = false;
+        let IsFileDeleting = false;
+        window.onload = () => {
+            editor.setValue(editor.getValue().replace(/^\s+|\s+$/g, ''), 1);
+        }
+      <% if (auth == false) { %>
+            let password = '<%= password %>';
+    <% } else { %>
+            let password;
+            $(window).on('load', () => {
+                $('.password').on('keyup', (key) => {
+                    if (key.keyCode == 13) {
+                        if (requestOn == false) {
+                            requestOn = true;
+                            $.ajax({
+                                url: '/verify-password',
+                                method: 'POST',
+                                data: {
+                                    password: $('.password').val()
+                                }
+                            }).done((data) => {
+                                if (data.success != null && data.success == true) {
+                                    requestOn = false;
+                                    password = data.encrypted;
+                                    $('.dialog-overlay').fadeOut(500, () => {
+                                        editor.focus();
+                                    });
+                                }
+                                else {
+                                    new jBox('Modal', {
+                                        title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                        content: '<div style="font-family:\'Barlow\',sans-serif;">' + data.error + '</div>',
+                                        overlay: false,
+                                        draggable: true,
+                                        onClose: () => {
+                                            requestOn = false
+                                        }
+                                    }).open();
+                                }
+                            }).fail(() => {
+                                new jBox('Modal', {
+                                    title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                    content: '<div style="font-family:\'Barlow\',sans-serif;">Failed To Send The Request To The Server!</div>',
+                                    overlay: false,
+                                    draggable: true,
+                                    onClose: () => {
+                                        requestOn = false
+                                    }
+                                }).open();
+                            });
+                        }
+                    }
+                });
+            });
+    <% } %>
+            $(document).ready(() => {
+                document.body.style.height = window.innerHeight + 'px';
+
+                editor = ace.edit("editor");
+                editor.setTheme("ace/theme/monokai");
+                editor.session.setMode("ace/mode/html");
+                editor.setShowPrintMargin(false);
+
+                $(window).on('resize', () => {
+                    $(document.body).css('height', window.innerHeight + 'px');
+                });
+            });
+
+        $(window).on('load', () => {
+            $('.loader').fadeOut(500, () => {
+                <% if (auth == false) { %>
+                    editor.focus();
+                <% } else { %>
+                    $('.password').focus();
+                    <% } %>
+            });
+        });
+
+        $('.preview-btn').click(() => {
+            $('.preview').attr('srcdoc', editor.getValue());
+            $('.preview-frame').fadeIn(500);
+
+        });
+
+        $('.close-preview').click(() => {
+            $('.preview-frame').fadeOut(500, () => {
+                $('.preview').attr('srcdoc', '');
+            });
+        });
+
+        $('.delete-btn').click(() => {
+            const deleteDialog = new jBox('Confirm', {
+                content: 'Are You Sure You Want To Delete This Code?',
+                cancelButton: 'Cancel',
+                confirmButton: 'Continue',
+                confirm: function () {
+                    if (IsFileDeleting == false) {
+                        $.ajax({
+                            url: '/delete',
+                            method: 'POST',
+                            data: {
+                                id: window.location.pathname.slice(1),
+                                password: password
+                            }
+                        }).done((data) => {
+                            if (data.success != null && data.success == true) {
+                                new jBox('Modal', {
+                                    title: '<b style="font-family:\'Barlow\',sans-serif;">Success!</b>',
+                                    content: '<div style="font-family:\'Barlow\',sans-serif;">Successfully Deleted Your Code!</div>',
+                                    overlay: false,
+                                    draggable: true,
+                                    onClose: () => {
+                                        window.location.href = 'https://share-code.top/'
+                                    }
+                                }).open();
+                            }
+                            else {
+                                new jBox('Modal', {
+                                    title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                    content: '<div style="font-family:\'Barlow\',sans-serif;">' + data.error + '</div>',
+                                    overlay: false,
+                                    draggable: true,
+                                    onClose: () => {
+                                        IsFileDeleting = false
+                                    }
+                                }).open();
+                            }
+                        }).fail(() => {
+                            new jBox('Modal', {
+                                title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                content: '<div style="font-family:\'Barlow\',sans-serif;">Failed To Send The Request To The Server!</div>',
+                                overlay: false,
+                                draggable: true,
+                                onClose: () => {
+                                    IsFileDeleting = false
+                                }
+                            }).open();
+                        });
+                    }
+                }
+            }).open();
+        });
+
+        $('.update-btn').click(() => {
+            if (IsFileSaving == false) {
+                if (editor.getValue().length < 405522) {
+                    IsFileSaving = true;
+                    $.ajax({
+                        url: '/save',
+                        method: 'POST',
+                        data: {
+                            password: password,
+                            code: editor.getValue(),
+                            id: window.location.pathname.slice(1)
+                        }
+                    }).done((data) => {
+                        if (data.success != null && data.success == true) {
+                            new jBox('Modal', {
+                                title: '<b style="font-family:\'Barlow\',sans-serif;">Success!</b>',
+                                content: '<div style="font-family:\'Barlow\',sans-serif;">Successfully Saved Your Code!</div>',
+                                overlay: false,
+                                draggable: true,
+                                onClose: () => {
+                                    IsFileSaving = false
+                                }
+                            }).open();
+                        }
+                        else {
+                            new jBox('Modal', {
+                                title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                                content: '<div style="font-family:\'Barlow\',sans-serif;">' + data.error + '</div>',
+                                overlay: false,
+                                draggable: true,
+                                onClose: () => {
+                                    IsFileSaving = false
+                                }
+                            }).open();
+                        }
+                    }).fail(() => {
+                        new jBox('Modal', {
+                            title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                            content: '<div style="font-family:\'Barlow\',sans-serif;">Failed To Send The Request To The Server!</div>',
+                            overlay: false,
+                            draggable: true,
+                            onClose: () => {
+                                IsFileSaving = false
+                            }
+                        }).open();
+                    });
+                }
+                else {
+                    new jBox('Modal', {
+                        title: '<b style="font-family:\'Barlow\',sans-serif;">Error!</b>',
+                        content: '<div style="font-family:\'Barlow\',sans-serif;">Request Size Too Big<br>Maximum Characters: 405522</div>',
+                        overlay: false,
+                        draggable: true,
+                        onClose: () => {
+                            requestOn = false
+                        }
+                    }).open();
+                }
+            }
+        });
+
+        $(document).on('keydown', (key) => {
+            if (key.ctrlKey == true && key.key == 's') {
+                key.preventDefault();
+                $('.update-btn').click();
+            }
+        });
+    })();
+</script>
+
+</html>

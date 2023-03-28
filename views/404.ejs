@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Share Code</title>
+</head>
+
+<body>
+    <img src="/icon.png" alt="">
+    <b>Share Code</b>
+    <span>The Page Your Requested Is Not Found On Our Server!</span>
+    <div class="home" onclick="window.location.href='https://share-code.top/';">Go Home</div>
+</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap');
+
+    body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: 'Barlow', sans-serif;
+    }
+
+    b {
+        font-size: 30px;
+    }
+
+    span {
+        font-size: 20px;
+    }
+
+    .home {
+        width: calc(100% - 30px);
+        padding: 10px;
+        background-color: blueviolet;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        max-width: 500px;
+        cursor: pointer;
+        margin-top: 5px;
+        user-select: none;
+        transition: all .10s linear;
+    }
+
+    .home:active {
+        background-color: rgb(128, 39, 211);
+    }
+</style>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.style.height = window.innerHeight + 'px';
+        window.addEventListener('resize', () => {
+            $(document.body).css('height', window.innerHeight + 'px');
+        });
+    });
+</script>
+
+</html>
