@@ -5,11 +5,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/icon.png" type="image/x-icon">
+    <meta name="description"
+        content="A completely free web hosting site that provides you with an amazing VS Code like editor and unlimited requests!">
+    <meta name="keywords"
+        content="code share, code sharing, free code hosting, free web hosting, unlimited web hosting, free web editor, free code editor">
     <title>Edit Code - Share Code</title>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.all.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CJNVRR27NK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-CJNVRR27NK');
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "gg1o7msyq7");
+    </script>
 </head>
 
 <body>
@@ -50,12 +73,21 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap');
 
+    html {
+        overflow: hidden;
+    }
+
     body {
         width: 100vw;
         height: 100vh;
         padding: 0;
         margin: 0;
         overflow: hidden;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        background-color: rgb(53, 53, 53);
     }
 
     .loader {
@@ -79,7 +111,7 @@
 
     #editor {
         width: 100%;
-        height: calc(100% - 40px);
+        height: calc(100% - 100px);
         font-size: 17px;
     }
 
@@ -205,6 +237,32 @@
 </style>
 
 <script>
+    (async () => {
+        var a = document.createElement('div');
+        a.innerHTML = '&nbsp;';
+        a.className = 'ads ad adsbox doubleclick ad-placement carbon-ads adglare';
+        a.style = 'width: 1px !important; height: 1px !important; position: absolute !important; left: -5000px !important; top: -5000px !important;';
+        var ads = false;
+        try {
+            document.body.appendChild(a);
+            var e = document.getElementsByClassName('adsbox')[0];
+            if (e.offsetHeight === 0 || e.clientHeight === 0) ads = true;
+            if (window.getComputedStyle !== undefined) {
+                var tmp = window.getComputedStyle(e, null);
+                if (tmp && (tmp.getPropertyValue('display') == 'none' || tmp.getPropertyValue('visibility') == 'hidden')) r = true;
+            }
+            document.body.removeChild(a);
+        } catch (e) { }
+        if (ads == true) {
+            alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
+        } else {
+            let AdScript = document.createElement('script');
+            AdScript.setAttribute('type', 'text/javascript');
+            AdScript.innerText = `atOptions = {'key': '99af1f3ae10e696f18b28c1dd9f8bbad','format': 'iframe','height': 60,'width': 468,'params': {}};document.write('<scr' + 'ipt type="text/javascript" defer src="http' + (location.protocol === 'https:' ? 's' : '') + '://pistolterrificsuspend.com/99af1f3ae10e696f18b28c1dd9f8bbad/invoke.js"></scr' + 'ipt>');`
+            document.body.appendChild(AdScript);
+        }
+    })();
+
     (() => {
         let editor;
         let requestOn = false;
@@ -309,7 +367,7 @@
                             url: '/delete',
                             method: 'POST',
                             data: {
-                                id: window.location.pathname.slice(1),
+                                id: new URLSearchParams(window.location.search).get('id'),
                                 password: password
                             }
                         }).done((data) => {
@@ -361,7 +419,7 @@
                         data: {
                             password: password,
                             code: editor.getValue(),
-                            id: window.location.pathname.slice(1)
+                            id: new URLSearchParams(window.location.search).get('id'),
                         }
                     }).done((data) => {
                         if (data.success != null && data.success == true) {

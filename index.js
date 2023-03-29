@@ -17,40 +17,56 @@ const deta = Deta(process.env.DETA_BASE_KEY);
 const AllCodes = deta.Base('Codes');
 
 app.get('/', (req, res) => {
-    if (req.subdomains[0] == 'new') {
-        res.render('new');
-    } else {
-        res.render('options');
-    }
+    res.render('options');
 });
 
 app.get('/:id', async (req, res) => {
-    let Code = await AllCodes.get(req.params.id);
-    if (Code != null) {
-        if (req.subdomains[0] == 'edit') {
-            if (req.query.password != null) {
-                let EncryptedPassword1 = crypto.createHmac('sha512', req.query.password);
-                EncryptedPassword1.update(req.params.id);
-                EncryptedPassword2 = crypto.createHash('md5');
-                EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
-                EncryptedPassword = EncryptedPassword2.digest('hex');
-                if (EncryptedPassword == Code.password) {
-                    res.render('edit', { auth: false, password: EncryptedPassword, code: Code.code });
+    if (req.params.id == 'sitemap.xml') {
+        res.send(path.join(__dirname, 'public', 'sitemap.xml'));
+    }
+    else if (req.params.id == 'icon.png') {
+        res.send(path.join(__dirname, 'public', 'icon.png'));
+    }
+    else if (req.params.id == 'new') {
+        res.render('new');
+    }
+    else {
+        let Code = await AllCodes.get(req.params.id == 'edit' ? req.query.id : req.params.id);
+        if (Code != null) {
+            if (req.params.id == 'edit') {
+                if (req.query.password != null) {
+                    let EncryptedPassword1 = crypto.createHmac('sha512', req.query.password);
+                    EncryptedPassword1.update(req.query.id);
+                    EncryptedPassword2 = crypto.createHash('md5');
+                    EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
+                    EncryptedPassword = EncryptedPassword2.digest('hex');
+                    if (EncryptedPassword == Code.password) {
+                        res.render('edit', { auth: false, password: EncryptedPassword, code: Code.code });
+                    }
+                    else {
+                        res.send({ status: 401, message: 'Incorrect Password' });
+                    }
                 }
                 else {
-                    res.send({ status: 401, message: 'Incorrect Password' })
+                    res.render('edit', { auth: true, code: Code.code });
                 }
             }
             else {
-                res.render('edit', { auth: true, code: Code.code });
+                await AllCodes.put({
+                    key: Code.key,
+                    password: Code.password,
+                    code: Code.code,
+                    email: Code.email,
+                    requests: Code.requests + 1
+                }, '', {
+                    expireIn: 3.154e+7
+                });
+                res.send(Code.code);
             }
         }
         else {
-            res.send(Code.code);
+            res.status(404).render('404');
         }
-    }
-    else {
-        res.status(404).render('404');
     }
 });
 
@@ -65,36 +81,31 @@ async function GenerateAUniqueCodeID() {
 }
 
 app.post('/verify-password', async (req, res) => {
-    if (req.subdomains[0] == 'edit') {
-        if (req.headers.referer != null) {
-            let url = new URL(req.headers.referer);
-            let code = await AllCodes.get(url.pathname.slice(1));
-            if (req.body.password != null) {
-                if (code != null) {
-                    let password = req.body.password;
-                    let EncryptedPassword1 = crypto.createHmac('sha512', password);
-                    EncryptedPassword1.update(code.key);
-                    EncryptedPassword2 = crypto.createHash('md5');
-                    EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
-                    EncryptedPassword = EncryptedPassword2.digest('hex');
-                    if (EncryptedPassword == code.password) {
-                        res.send({ success: true, encrypted: EncryptedPassword });
-                    }
-                    else {
-                        res.send({ success: false, error: 'Incorrect Password' });
-                    }
-                } else {
-                    res.send({ success: false, error: 'Invalid Code' });
+    if (req.headers.referer != null) {
+        let url = new URL(req.headers.referer);
+        let code = await AllCodes.get(url.searchParams.get('id'));
+        if (req.body.password != null) {
+            if (code != null) {
+                let password = req.body.password;
+                let EncryptedPassword1 = crypto.createHmac('sha512', password);
+                EncryptedPassword1.update(code.key);
+                EncryptedPassword2 = crypto.createHash('md5');
+                EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
+                EncryptedPassword = EncryptedPassword2.digest('hex');
+                if (EncryptedPassword == code.password) {
+                    res.send({ success: true, encrypted: EncryptedPassword });
+                }
+                else {
+                    res.send({ success: false, error: 'Incorrect Password' });
                 }
             } else {
-                res.send({ success: false, error: 'Password Not Found In Request' });
+                res.send({ success: false, error: 'Invalid Code' });
             }
         } else {
-            res.send({ success: false, error: 'Please Use Another Browser!' });
+            res.send({ success: false, error: 'Password Not Found In Request' });
         }
-    }
-    else {
-        res.send({ success: false, error: 'Incorrect Domain' });
+    } else {
+        res.send({ success: false, error: 'Please Use Another Browser!' });
     }
 });
 
@@ -107,18 +118,20 @@ app.post('/share', async (req, res) => {
         if (id == null || id.trim() == '') {
             id = await GenerateAUniqueCodeID();
         }
-
-        if (await AllCodes.get(id) == null) {
+        id = id.trim().replace(/[^\w\d]/g, '').toLowerCase();
+        if (await AllCodes.get(id) == null && id != 'sitemap.xml' && id != 'edit' && id != 'new' && id != 'icon.png') {
             let EncryptedPassword1 = crypto.createHmac('sha512', password);
             EncryptedPassword1.update(id);
             EncryptedPassword2 = crypto.createHash('md5');
             EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
             EncryptedPassword = EncryptedPassword2.digest('hex');
 
-            AllCodes.put({
+            await AllCodes.put({
                 key: id,
                 password: EncryptedPassword,
                 code: code,
+                email: email,
+                requests: 0
             }, '', {
                 expireIn: 3.154e+7
             });
@@ -142,6 +155,8 @@ app.post('/save', async (req, res) => {
                         key: req.body.id,
                         code: req.body.code,
                         password: Code.password,
+                        email: Code.email,
+                        requests: Code.requests
                     }, '', {
                         expireIn: 3.154e+7
                     });

@@ -5,11 +5,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/icon.png" type="image/x-icon">
+    <meta name="description"
+        content="A completely free web hosting site that provides you with an amazing VS Code like editor and unlimited requests!">
+    <meta name="keywords"
+        content="code share, code sharing, free code hosting, free web hosting, unlimited web hosting, free web editor, free code editor">
     <title>Create New Code - Share Code</title>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CJNVRR27NK"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-CJNVRR27NK');
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "gg1o7msyq7");
+    </script>
 </head>
 
 <body>
@@ -189,6 +212,10 @@
 
     .share-complete:active {
         background-color: rgb(125, 40, 206);
+    }
+
+    html {
+        overflow: hidden;
     }
 
     body {
@@ -405,7 +432,7 @@
                             }
                         }).done((data) => {
                             if (data.success != null && data.success == true) {
-                                window.location.href = 'https://edit.share-code.top/' + data.id + '?password=' + $('#code-password').val();
+                                window.location.href = 'https://share-code.top/edit?id=' + data.id + '&password=' + $('#code-password').val();
                             }
                             else {
                                 new jBox('Modal', {
