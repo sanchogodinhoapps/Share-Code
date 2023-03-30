@@ -15,6 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.all.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.all.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/sanchogodinhoapps/sanchogodinhoapps.github.io/ads/prebid.js"></script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CJNVRR27NK"></script>
     <script>
@@ -57,6 +59,8 @@
         </div>
         <iframe frameborder="0" class="preview"></iframe>
     </div>
+
+    <div class="ads"></div>
 
     <% if (auth==true){ %>
         <div class="dialog-overlay">
@@ -111,7 +115,7 @@
 
     #editor {
         width: 100%;
-        height: calc(100% - 100px);
+        height: calc(100% - 40px);
         font-size: 17px;
     }
 
@@ -238,28 +242,17 @@
 
 <script>
     (async () => {
-        var a = document.createElement('div');
-        a.innerHTML = '&nbsp;';
-        a.className = 'ads ad adsbox doubleclick ad-placement carbon-ads adglare';
-        a.style = 'width: 1px !important; height: 1px !important; position: absolute !important; left: -5000px !important; top: -5000px !important;';
-        var ads = false;
-        try {
-            document.body.appendChild(a);
-            var e = document.getElementsByClassName('adsbox')[0];
-            if (e.offsetHeight === 0 || e.clientHeight === 0) ads = true;
-            if (window.getComputedStyle !== undefined) {
-                var tmp = window.getComputedStyle(e, null);
-                if (tmp && (tmp.getPropertyValue('display') == 'none' || tmp.getPropertyValue('visibility') == 'hidden')) r = true;
+        if (window.adsAllowed != null && window.adsAllowed == true) {
+            let AdUnit = document.createElement('script');
+            let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            if (width >= 730) {
+                AdUnit.innerHTML += `atOptions = {'key':'63e0083e61b322b7d92b8e4420d1ee56','format':'iframe','height':90,'width' :728,'params':{}};document.write('<scr' + 'ipt async defer type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/63e0083e61b322b7d92b8e4420d1ee56/invoke.js"></scr' + 'ipt>');`;
+            } else {
+                AdUnit.innerHTML += `atOptions = {'key':'152e541531093e3545ad8811940fa28c','format':'iframe','height':50,'width' :320,'params':{}};document.write('<scr' + 'ipt async defer type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/152e541531093e3545ad8811940fa28c/invoke.js"></scr' + 'ipt>');`;
             }
-            document.body.removeChild(a);
-        } catch (e) { }
-        if (ads == true) {
-            alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
+            document.querySelector('.ads').appendChild(AdUnit);
         } else {
-            let AdScript = document.createElement('script');
-            AdScript.setAttribute('type', 'text/javascript');
-            AdScript.innerText = `atOptions = {'key': '99af1f3ae10e696f18b28c1dd9f8bbad','format': 'iframe','height': 60,'width': 468,'params': {}};document.write('<scr' + 'ipt type="text/javascript" defer src="http' + (location.protocol === 'https:' ? 's' : '') + '://pistolterrificsuspend.com/99af1f3ae10e696f18b28c1dd9f8bbad/invoke.js"></scr' + 'ipt>');`
-            document.body.appendChild(AdScript);
+            alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
         }
     })();
 

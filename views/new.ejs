@@ -15,6 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox/dist/jBox.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/sanchogodinhoapps/sanchogodinhoapps.github.io/ads/prebid.js"></script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CJNVRR27NK"></script>
     <script>
@@ -76,7 +78,7 @@
                 </div>
 
                 <div class="section" style="margin-top:10px;">
-                    <label for="code-name">Email (Required)</label>
+                    <label for="email-id">Email (Required)</label>
                     <br>
                     <input type="email" id="email-id">
                 </div>
@@ -87,9 +89,10 @@
                     <img src="https://img.icons8.com/ios-glyphs/30/null/info--v1.png" alt="info" loading="lazy"
                         width="17" style="cursor:pointer;" onclick="new jBox('Modal', {
                         title: '<b style=\'font-family:Barlow,sans-serif;\'>Info</b>',
-                    content: '<div style=\'font-family:Barlow,sans-serif;\'>We won\'t put any kind of ad on your site. Instead, ads will only be displayed in the editor while editing your code so that we can pay for the requests received from your codes!<div>',
-                    overlay: false,
-                    draggable: true
+                        content: '<div style=\'font-family:Barlow,sans-serif;\'>We won\'t put any kind of ad on your site. Instead, ads will only be displayed in the editor while editing your code so that we can pay for the requests received from your codes!<div>',
+                        overlay: false,
+                        draggable: true,
+                        maxWidth: 500
                     }).open();" />
                 </div>
                 <p
@@ -102,18 +105,19 @@
 
                 <b
                     style="width:calc(100% - 10px);margin:0;margin-top:10px;margin-left:5px;margin-right:5px;font-family:'Barlow',sans-serif;white-space:nowrap;overflow:auto;">
-                    Note: Your Code Will Automatically Get Deleted After 1 Year Of Inactiveness That Means, If No One
-                    Visits Your Code For 1 Year Than Your Last Visit Of Your Code, It Would Automatiaclly Get
-                    Deleted Since It Shows That The Code Is Not Required Anymore! Also, We Can Contact You Anytime If
-                    Needed Due To Which We Collect Email Address!
+                    By publishing your code, you accept our <a style="color:blue;cursor:pointer;" onclick="new jBox('Modal', {
+                        title: '<b style=\'font-family:Barlow,sans-serif;\'>Terms Of Service</b>',
+                        content: '<div style=\'font-family:Barlow,sans-serif;\'>We Have Kept This Terms Simple As Possible So That You May Comply To It Easily.<br><br>1. Your Code Will Automatically Get Deleted After 1 Year Of Inactiveness That Means, If No One Visits Your Code For 1 Year Than Your Last Visit Of Your Code, It Would Automatiaclly Get Deleted Since It Shows That The Code Is Not Required Anymore! Also, We May Contact You Anytime If Needed Due To Which We Collect Email Address!<br><br>2. Codes Would Not Be Recoverable In Case Of Lack Of Collection Of Funds To Run This Site Beause This Hosting Site Entirely Runs On Ads And No Other Source Of Earning The Code Developers Would Most Probably Be Emailed In Such A Case. If You Would Like To Add Your Contribution, You May DM Me On Sololearn (Sancho Godinho).<br><br>3. By Publishing With Us, You Agree That We May Add Or Remove Features From Your Site Too.<br><br>4. Setting Cron Jobs To Your Site Hosted Here Is Not Allowed Since It Would Be Considered Useless Traffic And May Lead To Site Deletion.<br><br>5. These Terms Subject To Change Anytime With/Without The Notice Of The Publishers.<div>',
+                        overlay: false,
+                        draggable: true,
+                        maxWidth: 500
+                    }).open();">terms & conditions</a>
                 </b>
                 <div class="share-complete">Publish Code!</div>
             </div>
         </div>
     </div>
-    <div class="ads" style="display: flex;align-items: center;justify-content: center;">
-        <ins class="ad" data-adult='0' data-uid='sanchogodinho202333062935' data-tnp-spot></ins>
-    </div>
+    <div class="ads" style="display: flex;align-items: center;justify-content: center;"></div>
 </body>
 
 <style>
@@ -334,38 +338,20 @@
 
 <script>
     (() => {
-        // (async () => {
-        //     var a = document.createElement('div');
-        //     a.innerHTML = '&nbsp;';
-        //     a.className = 'ads ad adsbox doubleclick ad-placement carbon-ads adglare';
-        //     a.style = 'width: 1px !important; height: 1px !important; position: absolute !important; left: -5000px !important; top: -5000px !important;';
-        //     var ads = false;
-        //     try {
-        //         document.body.appendChild(a);
-        //         var e = document.getElementsByClassName('adsbox')[0];
-        //         if (e.offsetHeight === 0 || e.clientHeight === 0) ads = true;
-        //         if (window.getComputedStyle !== undefined) {
-        //             var tmp = window.getComputedStyle(e, null);
-        //             if (tmp && (tmp.getPropertyValue('display') == 'none' || tmp.getPropertyValue('visibility') == 'hidden')) r = true;
-        //         }
-        //         document.body.removeChild(a);
-        //     } catch (e) { }
-        //     if (ads == true) {
-        //         alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
-        //     } else {
-        //         let AdScript = document.createElement('script');
-        //         AdScript.setAttribute('type', 'text/javascript');
-        //         AdScript.setAttribute('src', 'https://tnpads.xyz/static/js/banner.js');
-        //         document.head.appendChild(AdScript);
-        //         let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        //         if (width >= 702) {
-        //             document.querySelector('.ad').setAttribute('data-size', '350x50');
-        //             document.querySelector('.ads').innerHTML += `<ins class="ad2" data-adult='0' data-size='350x50' data-uid='sanchogodinho202333062935' data-tnp-spot></ins>`;
-        //         } else {
-        //             document.querySelector('.ad').setAttribute('data-size', '368x60');
-        //         }
-        //     }
-        // })();
+        (async () => {
+            if (window.adsAllowed != null && window.adsAllowed == true) {
+                let AdUnit = document.createElement('script');
+                let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                if (width >= 730) {
+                    AdUnit.innerHTML += `atOptions = {'key':'63e0083e61b322b7d92b8e4420d1ee56','format':'iframe','height':90,'width' :728,'params':{}};document.write('<scr' + 'ipt async defer type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/63e0083e61b322b7d92b8e4420d1ee56/invoke.js"></scr' + 'ipt>');`;
+                } else {
+                    AdUnit.innerHTML += `atOptions = {'key':'152e541531093e3545ad8811940fa28c','format':'iframe','height':50,'width' :320,'params':{}};document.write('<scr' + 'ipt async defer type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/152e541531093e3545ad8811940fa28c/invoke.js"></scr' + 'ipt>');`;
+                }
+                document.querySelector('.ads').appendChild(AdUnit);
+            } else {
+                alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
+            }
+        })();
 
         let editor;
         let fetching = false;

@@ -11,6 +11,8 @@
         content="code share, code sharing, free code hosting, free web hosting, unlimited web hosting, free web editor, free code editor">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Not Found - Share Code</title>
+    <script src="https://cdn.jsdelivr.net/gh/sanchogodinhoapps/sanchogodinhoapps.github.io/ads/prebid.js"></script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-CJNVRR27NK"></script>
     <script>
@@ -32,10 +34,13 @@
 </head>
 
 <body>
-    <img src="/icon.png" alt="">
-    <b>Share Code</b>
-    <span>The Page Your Requested Is Not Found On Our Server!</span>
-    <div class="home" onclick="window.location.href='https://share-code.top/';">Go Home</div>
+    <div class="top">
+        <img src="/icon.png" alt="">
+        <b>Share Code</b>
+        <span>The Page Your Requested Is Not Found On Our Server!</span>
+        <div class="home" onclick="window.location.href='https://share-code.top/';">Go Home</div>
+    </div>
+    <div class="ads"></div>
 </body>
 
 <style>
@@ -45,6 +50,16 @@
         width: 100vw;
         margin: 0;
         padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: 'Barlow', sans-serif;
+    }
+
+    .top {
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -80,10 +95,25 @@
 </style>
 
 <script>
+    (async () => {
+        if (window.adsAllowed != null && window.adsAllowed == true) {
+            let AdUnit = document.createElement('script');
+            let width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            if (width >= 730) {
+                AdUnit.innerHTML += `atOptions = {'key':'63e0083e61b322b7d92b8e4420d1ee56','format':'iframe','height':90,'width' :728,'params':{}};document.write('<scr' + 'ipt async defer type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/63e0083e61b322b7d92b8e4420d1ee56/invoke.js"></scr' + 'ipt>');`;
+            } else {
+                AdUnit.innerHTML += `atOptions = {'key':'152e541531093e3545ad8811940fa28c','format':'iframe','height':50,'width' :320,'params':{}};document.write('<scr' + 'ipt async defer type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitabledisplaynetwork.com/152e541531093e3545ad8811940fa28c/invoke.js"></scr' + 'ipt>');`;
+            }
+            document.querySelector('.ads').appendChild(AdUnit);
+        } else {
+            alert('Please 🙏 Disable Your Ad Blocker For Me To Pay For Your Website Reqests 😭');
+        }
+    })();
+
     window.addEventListener('DOMContentLoaded', () => {
         document.body.style.height = window.innerHeight + 'px';
         window.addEventListener('resize', () => {
-            $(document.body).css('height', window.innerHeight + 'px');
+            document.querySelector('body').style.height = window.innerHeight + 'px';
         });
     });
 </script>

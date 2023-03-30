@@ -1,16 +1,20 @@
 const favicon = require('serve-favicon');
 const crypto = require('node:crypto');
 const express = require('express');
-const helemet = require('helmet');
+const helmet = require('helmet');
 const { Deta } = require('deta');
 const path = require('path');
 require('dotenv').config();
 
 app = express();
-app.use(helemet({
+app.use(helmet({
     contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false
+    crossOriginResourcePolicy: false,
+    crossOriginEmbedderPolicy: false,
+    permittedCrossDomainPolicies: false,
+    crossOriginOpenerPolicy: false
 }));
+app.set('trust proxy', true);
 app.set('view engine', 'ejs');
 app.use(express.json({ limit: '3mb' }));
 app.set('views', path.join(__dirname, 'views'));
