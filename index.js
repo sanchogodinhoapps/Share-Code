@@ -1,11 +1,16 @@
 const favicon = require('serve-favicon');
 const crypto = require('node:crypto');
 const express = require('express');
+const helemet = require('helmet');
 const { Deta } = require('deta');
 const path = require('path');
 require('dotenv').config();
 
 app = express();
+app.use(helemet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+}));
 app.set('view engine', 'ejs');
 app.use(express.json({ limit: '3mb' }));
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +31,9 @@ app.get('/:id', async (req, res) => {
     }
     else if (req.params.id == 'icon.png') {
         res.send(path.join(__dirname, 'public', 'icon.png'));
+    }
+    else if (req.params.id == 'ads.txt') {
+        res.send(path.join(__dirname, 'public', 'ads.txt'));
     }
     else if (req.params.id == 'new') {
         res.render('new');
@@ -119,7 +127,7 @@ app.post('/share', async (req, res) => {
             id = await GenerateAUniqueCodeID();
         }
         id = id.trim().replace(/[^\w\d]/g, '').toLowerCase();
-        if (await AllCodes.get(id) == null && id != 'sitemap.xml' && id != 'edit' && id != 'new' && id != 'icon.png') {
+        if (await AllCodes.get(id) == null && id != 'sitemap.xml' && id != 'edit' && id != 'new' && id != 'icon.png' && id != 'ads.txt') {
             let EncryptedPassword1 = crypto.createHmac('sha512', password);
             EncryptedPassword1.update(id);
             EncryptedPassword2 = crypto.createHash('md5');
