@@ -12,7 +12,8 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
     crossOriginEmbedderPolicy: false,
     permittedCrossDomainPolicies: false,
-    crossOriginOpenerPolicy: false
+    crossOriginOpenerPolicy: false,
+    frameguard: false
 }));
 app.set('trust proxy', true);
 app.set('view engine', 'ejs');
