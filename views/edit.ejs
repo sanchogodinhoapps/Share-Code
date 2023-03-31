@@ -50,6 +50,7 @@
     <div class="btns">
         <div class="btn preview-btn">Preview</div>
         <div class="btn update-btn">Update</div>
+        <div class="btn share-link-btn">Share</div>
         <div class="btn delete-btn">Delete</div>
     </div>
 
@@ -146,6 +147,11 @@
     }
 
     .delete-btn {
+        width: calc(50% - 21px);
+        margin-left: 1px;
+    }
+
+    .share-link-btn {
         width: calc(50% - 21px);
         margin-left: 1px;
     }
@@ -461,6 +467,36 @@
                     }).open();
                 }
             }
+        });
+
+        $('.share-link-btn').click(() => {
+            new jBox('Modal', {
+                title: '<b style=\'font-family:Barlow,sans-serif;\'>Share Your Website Link</b>',
+                content: '<div style=\'font-family:Barlow,sans-serif;\'>Your Public Site Link Is:<br><a href="https://share-code.top/<%= id %>" target="_blank">https://share-code.top/<%= id %></a><br><div class="btn btn-open-share-dialog" style="width:calc(100% - 20px);margin-top:10px;border-radius:5px;">Share This Link</div><div>',
+                overlay: false,
+                onOpen: () => {
+                    $('.btn-open-share-dialog').click(async () => {
+                        try {
+                            await navigator.share({
+                                title: 'Share Code',
+                                text: 'See My Code On Share Code!',
+                                url: 'https://share-code.top/<%= id %>'
+                            });
+                        }
+                        catch (err) {
+                            console.error(err);
+                            new jBox('Modal', {
+                                title: '<b style=\'font-family:Barlow,sans-serif;\'>Error</b>',
+                                content: '<div style=\'font-family:Barlow,sans-serif;\'>This Browser Does Not Support Sharing Functionality Please Try Copying The URL Manually Or Use Another Browser</div><div>',
+                                maxWidth: 500,
+                                overlay: false,
+                                draggable: true,
+                                zIndex: 99999
+                            }).open();
+                        }
+                    });
+                }
+            }).open();
         });
 
         $(document).on('keydown', (key) => {

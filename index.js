@@ -54,14 +54,14 @@ app.get('/:id', async (req, res) => {
                     EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
                     EncryptedPassword = EncryptedPassword2.digest('hex');
                     if (EncryptedPassword == Code.password) {
-                        res.render('edit', { auth: false, password: EncryptedPassword, code: Code.code });
+                        res.render('edit', { auth: false, password: EncryptedPassword, code: Code.code , id:req.query.id});
                     }
                     else {
                         res.send({ status: 401, message: 'Incorrect Password' });
                     }
                 }
                 else {
-                    res.render('edit', { auth: true, code: Code.code });
+                    res.render('edit', { auth: true, code: Code.code , id:req.query.id});
                 }
             }
             else {
