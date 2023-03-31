@@ -70,7 +70,8 @@ app.get('/:id', async (req, res) => {
                     password: Code.password,
                     code: Code.code,
                     email: Code.email,
-                    requests: Code.requests + 1
+                    requests: Code.requests + 1,
+                    ip: req.ip
                 }, '', {
                     expireIn: 3.154e+7
                 });
@@ -144,7 +145,8 @@ app.post('/share', async (req, res) => {
                 password: EncryptedPassword,
                 code: code,
                 email: email,
-                requests: 0
+                requests: 0,
+                ip: req.ip
             }, '', {
                 expireIn: 3.154e+7
             });
@@ -169,7 +171,8 @@ app.post('/save', async (req, res) => {
                         code: req.body.code,
                         password: Code.password,
                         email: Code.email,
-                        requests: Code.requests
+                        requests: Code.requests,
+                        ip: req.ip
                     }, '', {
                         expireIn: 3.154e+7
                     });
