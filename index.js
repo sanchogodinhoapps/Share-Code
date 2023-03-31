@@ -54,14 +54,14 @@ app.get('/:id', async (req, res) => {
                     EncryptedPassword2.update(EncryptedPassword1.digest('hex'));
                     EncryptedPassword = EncryptedPassword2.digest('hex');
                     if (EncryptedPassword == Code.password) {
-                        res.render('edit', { auth: false, password: EncryptedPassword, code: Code.code , id:req.query.id});
+                        res.render('edit', { auth: false, password: EncryptedPassword, code: Code.code, id: req.query.id });
                     }
                     else {
                         res.send({ status: 401, message: 'Incorrect Password' });
                     }
                 }
                 else {
-                    res.render('edit', { auth: true, code: Code.code , id:req.query.id});
+                    res.render('edit', { auth: true, code: Code.code, id: req.query.id });
                 }
             }
             else {
@@ -95,8 +95,9 @@ async function GenerateAUniqueCodeID() {
 }
 
 app.post('/verify-password', async (req, res) => {
-    if (req.headers.referer != null) {
-        let url = new URL(req.headers.referer);
+    let _url = req.body.url;
+    if (_url != null) {
+        let url = new URL(_url);
         let code = await AllCodes.get(url.searchParams.get('id'));
         if (req.body.password != null) {
             if (code != null) {

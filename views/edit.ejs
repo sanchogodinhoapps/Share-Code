@@ -283,7 +283,8 @@
                                 url: '/verify-password',
                                 method: 'POST',
                                 data: {
-                                    password: $('.password').val()
+                                    password: $('.password').val(),
+                                    url: window.location.href
                                 }
                             }).done((data) => {
                                 if (data.success != null && data.success == true) {
