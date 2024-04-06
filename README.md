@@ -1,4 +1,3 @@
 # Share-Code
-A Free Website To Host Your Code!
-<br>
-Visit It Here: <a href="https://share-code.top/">https://share-code.top/</a>
+### This service has been depreciated. We are working on much better stuff!
+### You can use something like [Surge.sh](https://surge.sh/) which is free without ads & stuff!
